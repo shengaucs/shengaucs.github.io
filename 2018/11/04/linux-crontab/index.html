@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Linux_crontab | 胜仔漫谈</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Linux中crontab学习">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux_crontab">
+<meta property="og:url" content="http://yoursite.com/2018/11/04/linux-crontab/index.html">
+<meta property="og:site_name" content="胜仔漫谈">
+<meta property="og:description" content="Linux中crontab学习">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-11-04T05:23:23.000Z">
+<meta property="article:modified_time" content="2018-11-04T06:11:18.890Z">
+<meta property="article:author" content="jiasheng yu">
+<meta property="article:tag" content="linux">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="胜仔漫谈" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">胜仔漫谈</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">年轻就是朝阳，容不得片刻怠慢</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-linux-crontab" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/11/04/linux-crontab/" class="article-date">
+  <time datetime="2018-11-04T05:23:23.000Z" itemprop="datePublished">2018-11-04</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/linux/">linux</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Linux_crontab
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Linux中crontab学习</p>
+<a id="more"></a>
+<h1 id="一-作用"><a href="#一-作用" class="headerlink" title="一.作用"></a>一.作用</h1><p>   crontab命令可以修改每个用户的crontab文件，crontab文件主要是被cron守护进程所使用，用于指定时间周期执行指定命令。</p>
+<h1 id="二-命令参数"><a href="#二-命令参数" class="headerlink" title="二.命令参数"></a>二.命令参数</h1><p>  -u 指定修改哪个用户的crontab文件<br>  -l 显示当前的crontab文件内容<br>  -r 上次当前的crontab文件<br>  -i 和-r一起使用，表示在删除crontab文件之前进行确认<br>  -e 修改crontab文件，在修改之后，crontab文件就会被cron守护进程使用  </p>
+<h1 id="三-crontab文件的格式"><a href="#三-crontab文件的格式" class="headerlink" title="三.crontab文件的格式"></a>三.crontab文件的格式</h1><h2 id="crontab文件的每一行的格式如下："><a href="#crontab文件的每一行的格式如下：" class="headerlink" title="crontab文件的每一行的格式如下："></a>crontab文件的每一行的格式如下：</h2> <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">m h dom mon dow command</span><br></pre></td></tr></table></figure>
+
+<h2 id="1-前面五个部分"><a href="#1-前面五个部分" class="headerlink" title="1.前面五个部分"></a>1.前面五个部分</h2><p>   前面五个部分的含义和取值如下：<br>     m表示minute,取值为0-59<br>     h表示hour，取值为0-23<br>     dom表示day of month, 取值为1-31<br>     mon表示month,取值为1-12<br>     dow表示day of week，取值为0-7(0或者7表示周日)  </p>
+<p>   对于这个五个部分，都可以用”*”来表示所有的取值。 </p>
+<p>   可以通过枚举的方式指定某些值，通过”,”来隔开不同的值，例如”1,3,4”,表示该部分的值选择1，3和4</p>
+<p>   可以指定范围，例如”1-3”，表示这个部分的值为1，2，3。  </p>
+<p>   可以通过”/number”来指定这个部分的步长，例如”0-7/2”表示在0-7之间，每两个数值才执行一次，也就是0,2,4,6才会执行命令，步长也可以和”*“一起使用，表示全区间的步长执行，例如”*/2”表示取值范围每2个数执行一次。  </p>
+<p>   由于日期可以在dom和dow两个部分指定，如果两个部分都被指定(例如，不包含”*“)，那么，命令会在满足其中任一条件时执行，例如”30 4 1,15 * 5”会让命令在每个月1号和15，以及每个周五执行。  </p>
+<p>   对于前面的五个部分，还有一些简单的拓展，就是使用一些别名来指定一些常用的时间设定，哲别别名都是以”@”开头，具体的别名和对应的含义如下<br>     @reboot : 重启后运行一次<br>     @yearly : 一年执行一次，例如:”0 0 1 1 *”<br>     @annually : 一年执行一次，例如:”0 0 1 1 *”<br>     @monthly : 一个月执行一次，例如:”0 0 1 * *”<br>     @weekly: 一周执行一次，例如:”0 0 * * 0”<br>     @daily: 一天执行一次,例如:”0 0 * * *”<br>     @hourly: 一个小时执行一次，例如:”0 * * * *”  </p>
+<h2 id="2-command"><a href="#2-command" class="headerlink" title="2.command"></a>2.command</h2><p>  对于command部分，除了前面五个部分，那一行剩余的部分都会被认为属于command部分，一直到遇到换行符或者”%”。如果”%”没有进行转义，也就是写成”\%”的话，”%”前面的部分会作为command，而”%”后面部分会做为command的参数传递给command。<br>  对于command部分，如果是自定义的脚本，最好是指定绝地路径，包括脚本中使用的文件，最好也是用绝对路径。  </p>
+<h1 id="四-例子"><a href="#四-例子" class="headerlink" title="四.例子"></a>四.例子</h1><p>  假设要指定的命令为/home/sheng/code/shell/test_crontab.sh  </p>
+<h2 id="1-每分钟执行"><a href="#1-每分钟执行" class="headerlink" title="1.每分钟执行"></a>1.每分钟执行</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">* * * * * &#x2F;home&#x2F;sheng&#x2F;code&#x2F;shell&#x2F;test_crontab.sh</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="2-每30秒执行"><a href="#2-每30秒执行" class="headerlink" title="2.每30秒执行"></a>2.每30秒执行</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">* * * * * &#x2F;home&#x2F;sheng&#x2F;code&#x2F;shell&#x2F;test_crontab.sh;sleep 30; &#x2F;home&#x2F;sheng&#x2F;code&#x2F;shell&#x2F;test_crontab.sh;sleep</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="3-每10分钟执行"><a href="#3-每10分钟执行" class="headerlink" title="3.每10分钟执行"></a>3.每10分钟执行</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">*&#x2F;10 * * * * &#x2F;home&#x2F;sheng&#x2F;code&#x2F;shell&#x2F;test_crontab.sh</span><br></pre></td></tr></table></figure>
+
+<h1 id="五-参考链接"><a href="#五-参考链接" class="headerlink" title="五.参考链接"></a>五.参考链接</h1><p>1.<a href="https://help.ubuntu.com/community/CronHowto" target="_blank" rel="noopener">https://help.ubuntu.com/community/CronHowto</a><br>2.<a href="http://man7.org/linux/man-pages/man1/crontab.1.html" target="_blank" rel="noopener">http://man7.org/linux/man-pages/man1/crontab.1.html</a><br>3.<a href="http://man7.org/linux/man-pages/man5/crontab.5.htm" target="_blank" rel="noopener">http://man7.org/linux/man-pages/man5/crontab.5.html</a>  </p>
+<h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p><strong><em>版权所有，欢迎转载，转载请注明出处：<a href="https://shengaucs.github.io/" target="_blank" rel="noopener">https://shengaucs.github.io/</a>，谢谢</em></strong></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/11/04/linux-crontab/" data-id="ck76h5vmx000aekpp1tfr654o" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/" rel="tag">linux</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/11/24/base64/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Base64编码介绍
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/09/17/virtualbox-ubuntu-server-intranet/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Virtualbox中ubuntu Server组成局域网</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/HTTP/">HTTP</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/TCP/">TCP</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/TCP/IP/">IP</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/TCP/IP/learing/">learing</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/django/">django</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/django/apache/">apache</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/django/apache/deploy/">deploy</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/network/">network</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E5%B7%A7/">技巧</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP/" rel="tag">HTTP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IP/" rel="tag">IP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TCP/" rel="tag">TCP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/apache/" rel="tag">apache</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deploy/" rel="tag">deploy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/django/" rel="tag">django</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/learning/" rel="tag">learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/server/" rel="tag">server</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ubuntu/" rel="tag">ubuntu</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%80%E5%B7%A7/" rel="tag">技巧</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/HTTP/" style="font-size: 10px;">HTTP</a> <a href="/tags/IP/" style="font-size: 10px;">IP</a> <a href="/tags/TCP/" style="font-size: 10px;">TCP</a> <a href="/tags/apache/" style="font-size: 10px;">apache</a> <a href="/tags/deploy/" style="font-size: 10px;">deploy</a> <a href="/tags/django/" style="font-size: 10px;">django</a> <a href="/tags/learning/" style="font-size: 10px;">learning</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/server/" style="font-size: 10px;">server</a> <a href="/tags/ubuntu/" style="font-size: 10px;">ubuntu</a> <a href="/tags/%E6%8A%80%E5%B7%A7/" style="font-size: 10px;">技巧</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/11/24/base64/">Base64编码介绍</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/04/linux-crontab/">Linux_crontab</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/17/virtualbox-ubuntu-server-intranet/">Virtualbox中ubuntu Server组成局域网</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/16/apache-django-deploy/">Django在Apache2上的部署</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/15/tcpip-learning-note/">《TCP/IP详解（卷一）》学习笔记</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 jiasheng yu<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

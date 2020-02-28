@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Django在Apache2上的部署 | 胜仔漫谈</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="本文主要介绍基于docker的django部署">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Django在Apache2上的部署">
+<meta property="og:url" content="http://yoursite.com/2018/09/16/apache-django-deploy/index.html">
+<meta property="og:site_name" content="胜仔漫谈">
+<meta property="og:description" content="本文主要介绍基于docker的django部署">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-09-16T07:08:26.000Z">
+<meta property="article:modified_time" content="2018-10-07T14:23:37.762Z">
+<meta property="article:author" content="jiasheng yu">
+<meta property="article:tag" content="django">
+<meta property="article:tag" content="apache">
+<meta property="article:tag" content="deploy">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="胜仔漫谈" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">胜仔漫谈</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">年轻就是朝阳，容不得片刻怠慢</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-apache-django-deploy" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/09/16/apache-django-deploy/" class="article-date">
+  <time datetime="2018-09-16T07:08:26.000Z" itemprop="datePublished">2018-09-16</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/django/">django</a>►<a class="article-category-link" href="/categories/django/apache/">apache</a>►<a class="article-category-link" href="/categories/django/apache/deploy/">deploy</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Django在Apache2上的部署
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本文主要介绍基于docker的django部署</p>
+<a id="more"></a>
+<p>由于想要搭一个微信公众号的服务器端，因此找了下如何在ubuntu 18.04上配一个django的环境。由于django本身提供的服务器只能用于测试环境中使用，在正式环境中使用性能消耗太大，因此选择了Apache2作为服务器。</p>
+<p>由于每次配置都是重复地输入一些命令，感觉比较麻烦，本来想着把这些命令都写成一个脚本，然后通过运行脚本来进行配置，后面发现还有更简单的实现方式，就是把整个环境做成一个docker image，以后只要运行一个docker容器就可以完成配置，在代码写完后，还可以把代码也放入到image，这样就可以直接发布了，省去后面的麻烦。</p>
+<p>因此，本文主要介绍利用docker image来构建一个django的环境，并且启动一个容器来运行我们的web服务器端。</p>
+<h2 id="1-系统要求"><a href="#1-系统要求" class="headerlink" title="1. 系统要求"></a>1. 系统要求</h2><p>系统：ubuntu server 18.04</p>
+<p>docker:  18.06.1-ce</p>
+<h2 id="2-安装"><a href="#2-安装" class="headerlink" title="2. 安装"></a>2. 安装</h2><h3 id="2-1-docker安装"><a href="#2-1-docker安装" class="headerlink" title="2.1 docker安装"></a>2.1 docker安装</h3><p>安装docker官网<a href="https://www.docker.com/" target="_blank" rel="noopener">https://www.docker.com/</a> 上面的步骤进行安装。</p>
+<h3 id="2-2-创建Dockerfile-可选"><a href="#2-2-创建Dockerfile-可选" class="headerlink" title="2.2 创建Dockerfile[可选]"></a>2.2 创建Dockerfile[可选]</h3><p>可以选择自己创建一个Dockerfile, Dockerfile文件如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"># Use an official ubuntu as a parent image</span><br><span class="line"></span><br><span class="line">FROM ubuntu:latest</span><br><span class="line"></span><br><span class="line">WORKDIR &#x2F;root&#x2F;bin</span><br><span class="line"></span><br><span class="line">ADD start_apache.sh .</span><br><span class="line"></span><br><span class="line">ADD reload_apache.sh .</span><br><span class="line"></span><br><span class="line"># Update, install python2, pip, django 1.11, apache2 and wsgi</span><br><span class="line"></span><br><span class="line">RUN chmod u+x start_apache.sh reload_apache.sh \</span><br><span class="line">    &amp;&amp; apt-get update -y \</span><br><span class="line">    &amp;&amp; apt-get upgrade -y \</span><br><span class="line">    &amp;&amp; apt-get autoremove -y \</span><br><span class="line">    &amp;&amp; apt-get install python -y \</span><br><span class="line">    &amp;&amp; apt-get install python-pip -y \</span><br><span class="line">    &amp;&amp; pip install django&#x3D;&#x3D;1.11.15 &amp;&amp; pip install -U Django \</span><br><span class="line">    &amp;&amp; apt-get install apache2 -y &amp;&amp; apachectl -v \</span><br><span class="line">    &amp;&amp; apt-get install libapache2-mod-wsgi -y</span><br><span class="line"></span><br><span class="line"> # Make port 80 and 443 available to the world outside this container</span><br><span class="line"></span><br><span class="line">EXPOSE 80</span><br><span class="line">EXPOSE 443</span><br></pre></td></tr></table></figure>
+
+<p>其中，start_apache.sh是为了在容器中方便启动apache而写的脚本，reload_apache.sh是为了在容器中方便重启apache而写的脚本。这两个脚本的内容方便如下。</p>
+<p>start_apache.sh</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#!&#x2F;bin&#x2F;bash</span><br><span class="line">cd &#x2F;etc&#x2F;apache2&#x2F;sites-available</span><br><span class="line">echo &quot;Enter the name of conf : &quot;</span><br><span class="line">read conf_name</span><br><span class="line">a2ensite $&#123;conf_name&#125;.conf</span><br><span class="line">service apache2 start</span><br></pre></td></tr></table></figure>
+
+<p>reload_apache.sh</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#!&#x2F;bin&#x2F;bash</span><br><span class="line">service apache2 reload</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-3-使用已有的ubuntu-web镜像"><a href="#2-3-使用已有的ubuntu-web镜像" class="headerlink" title="2.3 使用已有的ubuntu_web镜像"></a>2.3 使用已有的ubuntu_web镜像</h3><p>如果不想通过Dockerfile来生成自己的镜像，也可以使用我分享的一个已经安装好环境的镜像。镜像的名字为shengaucs/ubuntu_web。</p>
+<h2 id="3-配置"><a href="#3-配置" class="headerlink" title="3. 配置"></a>3. 配置</h2><p>对于配置而言，主要是配置django的工程目录和wsgi.py。由于我的django项目目录为 <strong>/home/sheng/code/weixin</strong>，</p>
+<h3 id="3-1-配置工程目录"><a href="#3-1-配置工程目录" class="headerlink" title="3.1 配置工程目录"></a>3.1 配置工程目录</h3><p>在apache的安装目录</p>
+<h3 id="3-2-修改django工程中的wsgi-py"><a href="#3-2-修改django工程中的wsgi-py" class="headerlink" title="3.2 修改django工程中的wsgi.py"></a>3.2 修改django工程中的wsgi.py</h3><h3 id="3-3-修改文件权限"><a href="#3-3-修改文件权限" class="headerlink" title="3.3 修改文件权限"></a>3.3 修改文件权限</h3><h2 id="4-启动容器"><a href="#4-启动容器" class="headerlink" title="4.  启动容器"></a>4.  启动容器</h2><p>可以使用下面的命令来启动容器，其中–mount是挂在文件夹，是让本地的文件夹像U盘一样挂载到容器中。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo a2ensite weixin.conf</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ol>
+<li><a href="https://www.jianshu.com/p/b40a4a12fff1" target="_blank" rel="noopener">https://www.jianshu.com/p/b40a4a12fff1</a></li>
+<li><a href="https://code.ziqiangxuetang.com/django/django-deploy.html" target="_blank" rel="noopener">https://code.ziqiangxuetang.com/django/django-deploy.html</a></li>
+</ol>
+<h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p><strong><em>版权所有，欢迎转载，转载请注明出处：<a href="https://shengaucs.github.io/" target="_blank" rel="noopener">https://shengaucs.github.io/</a>，谢谢</em></strong></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/09/16/apache-django-deploy/" data-id="ck76h5vm80000ekpp2x362fqf" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/apache/" rel="tag">apache</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/deploy/" rel="tag">deploy</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/django/" rel="tag">django</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/09/17/virtualbox-ubuntu-server-intranet/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Virtualbox中ubuntu Server组成局域网
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/09/15/tcpip-learning-note/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">《TCP/IP详解（卷一）》学习笔记</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/HTTP/">HTTP</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/TCP/">TCP</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/TCP/IP/">IP</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/TCP/IP/learing/">learing</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/django/">django</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/django/apache/">apache</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/django/apache/deploy/">deploy</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/network/">network</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E5%B7%A7/">技巧</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP/" rel="tag">HTTP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IP/" rel="tag">IP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TCP/" rel="tag">TCP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/apache/" rel="tag">apache</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deploy/" rel="tag">deploy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/django/" rel="tag">django</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/learning/" rel="tag">learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/server/" rel="tag">server</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ubuntu/" rel="tag">ubuntu</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%80%E5%B7%A7/" rel="tag">技巧</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/HTTP/" style="font-size: 10px;">HTTP</a> <a href="/tags/IP/" style="font-size: 10px;">IP</a> <a href="/tags/TCP/" style="font-size: 10px;">TCP</a> <a href="/tags/apache/" style="font-size: 10px;">apache</a> <a href="/tags/deploy/" style="font-size: 10px;">deploy</a> <a href="/tags/django/" style="font-size: 10px;">django</a> <a href="/tags/learning/" style="font-size: 10px;">learning</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/server/" style="font-size: 10px;">server</a> <a href="/tags/ubuntu/" style="font-size: 10px;">ubuntu</a> <a href="/tags/%E6%8A%80%E5%B7%A7/" style="font-size: 10px;">技巧</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/11/24/base64/">Base64编码介绍</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/04/linux-crontab/">Linux_crontab</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/17/virtualbox-ubuntu-server-intranet/">Virtualbox中ubuntu Server组成局域网</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/16/apache-django-deploy/">Django在Apache2上的部署</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/15/tcpip-learning-note/">《TCP/IP详解（卷一）》学习笔记</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 jiasheng yu<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

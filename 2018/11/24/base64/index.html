@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Base64编码介绍 | 胜仔漫谈</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="base64编码介绍">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Base64编码介绍">
+<meta property="og:url" content="http://yoursite.com/2018/11/24/base64/index.html">
+<meta property="og:site_name" content="胜仔漫谈">
+<meta property="og:description" content="base64编码介绍">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/shengaucs/blog_image/master/base64/example.JPG">
+<meta property="og:image" content="https://raw.githubusercontent.com/shengaucs/blog_image/master/base64/padding.JPG">
+<meta property="og:image" content="https://raw.githubusercontent.com/shengaucs/blog_image/master/base64/alphabet.JPG">
+<meta property="article:published_time" content="2018-11-24T13:55:20.000Z">
+<meta property="article:modified_time" content="2018-11-24T14:45:58.214Z">
+<meta property="article:author" content="jiasheng yu">
+<meta property="article:tag" content="HTTP">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/shengaucs/blog_image/master/base64/example.JPG">
+  
+    <link rel="alternate" href="/atom.xml" title="胜仔漫谈" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">胜仔漫谈</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">年轻就是朝阳，容不得片刻怠慢</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-base64" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/11/24/base64/" class="article-date">
+  <time datetime="2018-11-24T13:55:20.000Z" itemprop="datePublished">2018-11-24</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/HTTP/">HTTP</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Base64编码介绍
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>base64编码介绍</p>
+<a id="more"></a>
+<h1 id="一-简要原理"><a href="#一-简要原理" class="headerlink" title="一.简要原理"></a>一.简要原理</h1><p>  base64是一种基于64个可打印字符来表示二进制数据的方法，由于2^6=64，因此，每个base64的字符对应的数值的有效位只有六位，即每个base64字符只有6个bit。对于8bit的原始字符而言，3个字符就有24个bit，因此，可以用4个base64字符来表示。使用base64进行编码后，新的字符串的长度至少为原来长度的4/3倍。</p>
+<h1 id="二-主要应用"><a href="#二-主要应用" class="headerlink" title="二.主要应用"></a>二.主要应用</h1><p>   base64编码作为一种在HTTP应用中使用非常广的编码方式，主要是在一些HTTP的message的一些字段进行编码，避免特殊字符对于messge的解析造成干扰。</p>
+<h1 id="三-具体原理"><a href="#三-具体原理" class="headerlink" title="三.具体原理"></a>三.具体原理</h1><p>1.编码原理<br>   base64编码使用64个可见字符来对输入的8bit字符串进行编码，由于每个base64字符只有6bit，因此，可以将输入字符串按照每3个字符进行切片，每3个输入字符可以编码为4个base64字符，然后按照原来的顺序把这些base64字符连接起来，就可以得到整个字符串的编码。<br>   对于3个输入字符的编码，可以将这3个字符组合成24bit的数组，然后将这24个bit按照6个bit一份分成4份，每一份可以根据其数值得到对应的base64编码的字符。具体方法可以用下面的图表示</p>
+<p>   <img src="https://raw.githubusercontent.com/shengaucs/blog_image/master/base64/example.JPG" alt="" title="example"></p>
+<p>  从上面的图可以看出，假设输入的三个字符为i[0], i[1], i[2], 编码后的4个base64的字符的数值为b[0],b[1],b[2],b[3],可以等到下面的关系<br>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">b[0] &#x3D; (i[0] &gt;&gt; 2) &amp; 0x3F</span><br><span class="line">b[1] &#x3D; ((i[0] &lt;&lt; 4) &amp; 0x30) | ((i[1] &gt;&gt; 4) &amp; 0x0F)</span><br><span class="line">b[2] &#x3D; ((i[1] &lt;&lt; 2) &amp; 0x3C) | ((i[2] &gt;&gt; 6) &amp; 0x03)</span><br><span class="line">b[3] &#x3D; i[2] &amp; 0x3F</span><br></pre></td></tr></table></figure></p>
+<p>2.补齐<br>  由于base64编码是将8bit的字节流编码为6bit字节流，因此，当输入字符串的字符个数不是3的倍数时，需要使用0对这些位进行补齐，使其能够达到24bit。如果6bit都是用来补齐的，也就是说，这个base64编码字符是全部由补齐位生成的话，就用特殊字符’=’表示。<br><img src="https://raw.githubusercontent.com/shengaucs/blog_image/master/base64/padding.JPG" alt="" title="padding"></p>
+<p>3.字母对照表<br><img src="https://raw.githubusercontent.com/shengaucs/blog_image/master/base64/alphabet.JPG" alt="" title="alphabet"></p>
+<h1 id="四-C-实现"><a href="#四-C-实现" class="headerlink" title="四.C++实现"></a>四.C++实现</h1><p>  完整实现可以参考<a href="https://github.com/shengaucs/base64.git" target="_blank" rel="noopener">https://github.com/shengaucs/base64.git</a></p>
+<h1 id="五-参考文献"><a href="#五-参考文献" class="headerlink" title="五.参考文献"></a>五.参考文献</h1><ol>
+<li><a href="https://zh.wikipedia.org/wiki/Base64" target="_blank" rel="noopener">https://zh.wikipedia.org/wiki/Base64</a></li>
+<li>《HTTP:The Definitive Guide》</li>
+</ol>
+<h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p><strong><em>版权所有，欢迎转载，转载请注明出处：<a href="https://shengaucs.github.io/" target="_blank" rel="noopener">https://shengaucs.github.io/</a>，谢谢</em></strong></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/11/24/base64/" data-id="ck76h5vmi0001ekpp3ppj5avi" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HTTP/" rel="tag">HTTP</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2018/11/04/linux-crontab/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Linux_crontab</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/HTTP/">HTTP</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/TCP/">TCP</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/TCP/IP/">IP</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/TCP/IP/learing/">learing</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/django/">django</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/django/apache/">apache</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/django/apache/deploy/">deploy</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/network/">network</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E5%B7%A7/">技巧</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP/" rel="tag">HTTP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IP/" rel="tag">IP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TCP/" rel="tag">TCP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/apache/" rel="tag">apache</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deploy/" rel="tag">deploy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/django/" rel="tag">django</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/learning/" rel="tag">learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/server/" rel="tag">server</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ubuntu/" rel="tag">ubuntu</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%80%E5%B7%A7/" rel="tag">技巧</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/HTTP/" style="font-size: 10px;">HTTP</a> <a href="/tags/IP/" style="font-size: 10px;">IP</a> <a href="/tags/TCP/" style="font-size: 10px;">TCP</a> <a href="/tags/apache/" style="font-size: 10px;">apache</a> <a href="/tags/deploy/" style="font-size: 10px;">deploy</a> <a href="/tags/django/" style="font-size: 10px;">django</a> <a href="/tags/learning/" style="font-size: 10px;">learning</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/server/" style="font-size: 10px;">server</a> <a href="/tags/ubuntu/" style="font-size: 10px;">ubuntu</a> <a href="/tags/%E6%8A%80%E5%B7%A7/" style="font-size: 10px;">技巧</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/11/24/base64/">Base64编码介绍</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/04/linux-crontab/">Linux_crontab</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/17/virtualbox-ubuntu-server-intranet/">Virtualbox中ubuntu Server组成局域网</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/16/apache-django-deploy/">Django在Apache2上的部署</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/15/tcpip-learning-note/">《TCP/IP详解（卷一）》学习笔记</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 jiasheng yu<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
