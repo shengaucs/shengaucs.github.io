@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Libevent文档翻译之-前言 | 胜仔漫谈</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="libevent作为一个高效的网络库，可以集成一下作为网络服务器的底层，因此，有必要学习下libevent的使用。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Libevent文档翻译之-前言">
+<meta property="og:url" content="http://yoursite.com/2017/05/06/libevent-learning-about-and-intro/index.html">
+<meta property="og:site_name" content="胜仔漫谈">
+<meta property="og:description" content="libevent作为一个高效的网络库，可以集成一下作为网络服务器的底层，因此，有必要学习下libevent的使用。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2017-05-05T18:57:56.000Z">
+<meta property="article:modified_time" content="2020-02-29T11:03:53.963Z">
+<meta property="article:author" content="jiasheng yu">
+<meta property="article:tag" content="libevent">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="胜仔漫谈" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">胜仔漫谈</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">年轻就是朝阳，容不得片刻怠慢</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-libevent-learning-about-and-intro" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/05/06/libevent-learning-about-and-intro/" class="article-date">
+  <time datetime="2017-05-05T18:57:56.000Z" itemprop="datePublished">2017-05-06</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/libevent/">libevent</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Libevent文档翻译之-前言
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>libevent作为一个高效的网络库，可以集成一下作为网络服务器的底层，因此，有必要学习下libevent的使用。</p>
+<a id="more"></a>
+<p>  本系列文章主要是对于libevent文档《Fast portable non-blocking network programming with Libevent》的翻译，该书目前可以在<a href="https://github.com/nmathewson/libevent-book" target="_blank" rel="noopener">github</a>上进行下载，我自己也fork了一份。</p>
+<h1 id="00-摘要"><a href="#00-摘要" class="headerlink" title="00 摘要"></a>00 摘要</h1><p>关于本书</p>
+<hr>
+<p>本书主要是关于如何利用Libevent 2.0 (或者更新版本)来实现一个c语言的高速的轻便的异步网络IO程序。本书假设读者掌握了下面两个方面的知识：</p>
+<ul>
+<li>C语言</li>
+<li>了解C语言中关于网络的基本接口，例如socket()，connect()等</li>
+</ul>
+<p>关于例程</p>
+<hr>
+<p>本书的所有例程都能够在Linux, FreeBSD, OpenBSD, NetBSD, Mac OS X, Solaris, 和Android 运行。但是，有些例程不能在Windows系统下运行。</p>
+<h1 id="01-简介"><a href="#01-简介" class="headerlink" title="01 简介"></a>01 简介</h1><p>关于异步IO</p>
+<hr>
+<p>大部分程序都是从阻塞的IO调用开始的。对于一个同步的IO，当你调用它时，只有在它已经完成了对应的操作或者超过了指定的时间时，该操作才会返回。例如，当你调用connect()来进行一个TCP连接时，操作系统会发送一个SYN数据包给被连接的对象，只有当操作系统接受到一个SYN的回应或者超时时，connct()才会返回。</p>
+<p>下面是一个使用阻塞网络调用的简单客户端，其建立一个到<a href="http://www.google.com的HTTP连接，并把HTTP连接的返回值打印出来。" target="_blank" rel="noopener">www.google.com的HTTP连接，并把HTTP连接的返回值打印出来。</a></p>
+<pre><code>/* For sockaddr_in */
+#include &lt;netinet/in.h&gt;
+/* For socket functions */
+#include &lt;sys/socket.h&gt;
+/* For gethostbyname */
+#include &lt;netdb.h&gt;
+
+#include &lt;unistd.h&gt;
+#include &lt;string.h&gt;
+#include &lt;stdio.h&gt;
+
+int main(int c, char **v)
+{
+    const char query[] =
+        &quot;GET / HTTP/1.0\r\n&quot;
+        &quot;Host: www.google.com\r\n&quot;
+        &quot;\r\n&quot;;
+    const char hostname[] = &quot;www.google.com&quot;;
+    struct sockaddr_in sin;
+    struct hostent *h;
+    const char *cp;
+    int fd;
+    ssize_t n_written, remaining;
+    char buf[1024];
+
+    /* Look up the IP address for the hostname.   Watch out; this isn&apos;t
+       threadsafe on most platforms. */
+    h = gethostbyname(hostname);
+    if (!h) {
+        fprintf(stderr, &quot;Couldn&apos;t lookup %s: %s&quot;, hostname, hstrerror(h_errno));
+        return 1;
+    }
+    if (h-&gt;h_addrtype != AF_INET) {
+        fprintf(stderr, &quot;No ipv6 support, sorry.&quot;);
+        return 1;
+    }
+
+    /* Allocate a new socket */
+    fd = socket(AF_INET, SOCK_STREAM, 0);
+    if (fd &lt; 0) {
+        perror(&quot;socket&quot;);
+        return 1;
+    }
+
+    /* Connect to the remote host. */
+    sin.sin_family = AF_INET;
+    sin.sin_port = htons(80);
+    sin.sin_addr = *(struct in_addr*)h-&gt;h_addr;
+    if (connect(fd, (struct sockaddr*) &amp;sin, sizeof(sin))) {
+        perror(&quot;connect&quot;);
+        close(fd);
+        return 1;
+    }
+
+    /* Write the query. */
+    /* XXX Can send succeed partially? */
+    cp = query;
+    remaining = strlen(query);
+    while (remaining) {
+      n_written = send(fd, cp, remaining, 0);
+      if (n_written &lt;= 0) {
+        perror(&quot;send&quot;);
+        return 1;
+      }
+      remaining -= n_written;
+      cp += n_written;
+    }
+
+    /* Get an answer back. */
+    while (1) {
+        ssize_t result = recv(fd, buf, sizeof(buf), 0);
+        if (result == 0) {
+            break;
+        } else if (result &lt; 0) {
+            perror(&quot;recv&quot;);
+            close(fd);
+            return 1;
+        }
+        fwrite(buf, 1, result, stdout);
+    }
+
+    close(fd);
+    return 0;
+}</code></pre><p>上面的例子中的所有对于网络的调用都是阻塞的。<code>gethostbyname()</code>函数只有在其成功获得<a href="http://www.google.com的回复或者失败时，才会返回。`connect()`函数只有在与远程服务端进行了连接之后才会返回。而`recv()`函数只有在接收到了数据或者socket关闭时才会返回。`send()`函数只有在将数据flushed到系统的发送缓存区才会返回。" target="_blank" rel="noopener">www.google.com的回复或者失败时，才会返回。`connect()`函数只有在与远程服务端进行了连接之后才会返回。而`recv()`函数只有在接收到了数据或者socket关闭时才会返回。`send()`函数只有在将数据flushed到系统的发送缓存区才会返回。</a></p>
+<p>从上面的代码可以看出，阻塞式IO并非不可避免的。如果程序在等待IO期间，程序并没有什么其他需要处理的数据，那么，使用阻塞式IO也是可以的。但是，如果你的程序一次需要处理多个连接。以下面的代码为例，假设你需要从两个连接中读取数据，但是你并不知道哪个连接的数据会先来。你不能说你会先接受到<code>fd[2]</code>的数据，因此，例子中的程序在完成对于<code>fd[0]</code>和<code>fd[1]</code>的数据接收之前，并不会接收<code>fd[2]</code>的数据。</p>
+<pre><code>/* This won&apos;t work. */
+char buf[1024];
+int i, n;
+while (i_still_want_to_read()) {
+    for (i=0; i&lt;n_sockets; ++i) {
+        n = recv(fd[i], buf, sizeof(buf), 0);
+        if (n==0)
+            handle_close(fd[i]);
+        else if (n&lt;0)
+            handle_error(fd[i], errno);
+        else
+            handle_input(fd[i], buf, n);
+    }
+}</code></pre><p>有时，人们通过使用多线程或者多进程来解决上面的问题。一个最简单的多线程解决方案是让一个线程（或进程）单独处理一个连接。由于每个连接都是由一个单独的线程（或进程）来处理的，因此，一个连接的阻塞不会导致其他连接堵塞。</p>
+<p>下面是另一个例子。这个是一个监听40713端口的简单服务器，其每次从输入数据中读取遗憾，并进行ROT13混淆，然后输出。它使用Unix系统自带的<code>fork()</code>函数来创建一个新的进程来处理新的连接。</p>
+<pre><code>/* For sockaddr_in */
+#include &lt;netinet/in.h&gt;
+/* For socket functions */
+#include &lt;sys/socket.h&gt;
+
+#include &lt;unistd.h&gt;
+#include &lt;string.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+#define MAX_LINE 16384
+
+char
+rot13_char(char c)
+{
+  /* We don&apos;t want to use isalpha here; setting the locale would change
+  * which characters are considered alphabetical. */
+ if ((c &gt;= &apos;a&apos; &amp;&amp; c &lt;= &apos;m&apos;) || (c &gt;= &apos;A&apos; &amp;&amp; c &lt;= &apos;M&apos;))
+     return c + 13;
+ else if ((c &gt;= &apos;n&apos; &amp;&amp; c &lt;= &apos;z&apos;) || (c &gt;= &apos;N&apos; &amp;&amp; c &lt;= &apos;Z&apos;))
+     return c - 13;
+ else
+       return c;
+}
+
+void
+child(int fd)
+{
+    char outbuf[MAX_LINE+1];
+    size_t outbuf_used = 0;
+    ssize_t result;
+
+    while (1) {
+        char ch;
+        result = recv(fd, &amp;ch, 1, 0);
+        if (result == 0) {
+            break;
+        } else if (result == -1) {
+          perror(&quot;read&quot;);
+           break;
+        }
+
+       /* We do this test to keep the user from overflowing the buffer. */
+       if (outbuf_used &lt; sizeof(outbuf)) {
+            outbuf[outbuf_used++] = rot13_char(ch); 
+        }
+
+        if (ch == &apos;\n&apos;) {
+            send(fd, outbuf, outbuf_used, 0);
+            outbuf_used = 0;
+          continue;
+       }
+  }
+}
+
+void
+run(void)
+{
+    int listener;
+    struct sockaddr_in sin;
+
+    sin.sin_family = AF_INET;
+    sin.sin_addr.s_addr = 0;
+    sin.sin_port = htons(40713);
+
+    listener = socket(AF_INET, SOCK_STREAM, 0);
+
+#ifndef WIN32
+    {
+        int one = 1;
+        setsockopt(listener, SOL_SOCKET, SO_REUSEADDR, &amp;one, sizeof(one));
+    }
+#endif
+
+    if (bind(listener, (struct sockaddr*)&amp;sin, sizeof(sin)) &lt; 0) {
+        perror(&quot;bind&quot;);
+        return;
+    }
+
+    if (listen(listener, 16)&lt;0) {
+        perror(&quot;listen&quot;);
+        return;
+    }
+
+
+
+    while (1) {
+        struct sockaddr_storage ss;
+        socklen_t slen = sizeof(ss);
+        int fd = accept(listener, (struct sockaddr*)&amp;ss, &amp;slen);
+        if (fd &lt; 0) {
+            perror(&quot;accept&quot;);
+        } else {
+            if (fork() == 0) {
+                child(fd);
+                exit(0);
+            }
+        }
+    }
+}
+
+int
+main(int c, char **v)
+{
+    run();
+    return 0;
+}</code></pre><p>因此，我们是否已经有一个完美的方案来解决多连接问题了呢？我是否可以停止写这本书并且开始做其他事了呢？并不是。首先，进程（甚至线程）的创建在一些平台上的消耗都是非常大的。在实际应用中，你可能会选择使用线程池来代替创建一个新的进程。更重要的是，上面的解决方案的拓展性比较差。如果你的程序需要处理上千个甚至上万个连接时，处理上万个进程并不会很高效，因此每个CPU核只能同时处理少数几个线程。</p>
+<p>……未完待续</p>
+<h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p><strong><em>版权所有，欢迎转载，转载请注明出处：<a href="https://shengyjs.github.io/" target="_blank" rel="noopener">https://shengyjs.github.io/</a>，谢谢</em></strong></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/05/06/libevent-learning-about-and-intro/" data-id="ck77i9gnd0006voppbbmoh9ys" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/libevent/" rel="tag">libevent</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/07/22/install-django/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Django安装
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/01/23/python-note-0/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Python小札记(1)-对象的默认布尔值</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/DJango/">DJango</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/HTTP/">HTTP</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/libevent/">libevent</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/network/">network</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E5%B7%A7/">技巧</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Django/" rel="tag">Django</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP/" rel="tag">HTTP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/learning/" rel="tag">learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/libevent/" rel="tag">libevent</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/server/" rel="tag">server</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ubuntu/" rel="tag">ubuntu</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%80%E5%B7%A7/" rel="tag">技巧</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Django/" style="font-size: 10px;">Django</a> <a href="/tags/HTTP/" style="font-size: 10px;">HTTP</a> <a href="/tags/learning/" style="font-size: 10px;">learning</a> <a href="/tags/libevent/" style="font-size: 10px;">libevent</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/server/" style="font-size: 10px;">server</a> <a href="/tags/ubuntu/" style="font-size: 10px;">ubuntu</a> <a href="/tags/%E6%8A%80%E5%B7%A7/" style="font-size: 10px;">技巧</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/11/24/base64/">Base64编码介绍</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/04/linux-crontab/">Linux_crontab</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/17/virtualbox-ubuntu-server-intranet/">Virtualbox中ubuntu Server组成局域网</a>
+          </li>
+        
+          <li>
+            <a href="/2018/07/15/effective-python-learning/">《Effective Python》学习总结</a>
+          </li>
+        
+          <li>
+            <a href="/2017/07/22/install-django/">Django安装</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 jiasheng yu<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
