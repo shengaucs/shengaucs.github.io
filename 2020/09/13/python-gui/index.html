@@ -7,15 +7,15 @@
   
   <title>Python-Gui | 胜仔漫谈</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Python GUI库对比   库名 安装方式 许可证 支持的平台    tkinter python自带 python是可以商用的开源协议，tcl&#x2F;tk是BSD协议 支持大部分桌面平台   PyQt5 pip安装 GPL，基于PyQt5开发的程序需要开源 基本上所有的平台   wxPython pip安装 LGPL，只是使用库的话，是不需要开源的 基本上所有的PC平台   Dabo 多年不更新了">
+  <meta name="description" content="Python GUI库对比&amp;emsp;&amp;emsp;由于最近需要做一些简单的工具来完成一些重复性的劳动，在核心功能已经用python实现的基础上，考虑加上GUI，以便可以发给其他人使用，因此，对Python常用的GUI加以调研，形成了下面的对比表。    库名 安装方式 许可证 支持的平台    tkinter python自带 python是可以商用的开源协议，tcl&#x2F;tk是BSD协议 大部分桌面">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Python-Gui">
 <meta property="og:url" content="http://yoursite.com/2020/09/13/python-gui/index.html">
 <meta property="og:site_name" content="胜仔漫谈">
-<meta property="og:description" content="Python GUI库对比   库名 安装方式 许可证 支持的平台    tkinter python自带 python是可以商用的开源协议，tcl&#x2F;tk是BSD协议 支持大部分桌面平台   PyQt5 pip安装 GPL，基于PyQt5开发的程序需要开源 基本上所有的平台   wxPython pip安装 LGPL，只是使用库的话，是不需要开源的 基本上所有的PC平台   Dabo 多年不更新了">
+<meta property="og:description" content="Python GUI库对比&amp;emsp;&amp;emsp;由于最近需要做一些简单的工具来完成一些重复性的劳动，在核心功能已经用python实现的基础上，考虑加上GUI，以便可以发给其他人使用，因此，对Python常用的GUI加以调研，形成了下面的对比表。    库名 安装方式 许可证 支持的平台    tkinter python自带 python是可以商用的开源协议，tcl&#x2F;tk是BSD协议 大部分桌面">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-09-13T08:55:06.000Z">
-<meta property="article:modified_time" content="2020-09-13T10:00:46.188Z">
+<meta property="article:modified_time" content="2020-09-13T14:34:42.543Z">
 <meta property="article:author" content="jiasheng yu">
 <meta property="article:tag" content="python">
 <meta name="twitter:card" content="summary">
@@ -97,7 +97,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="Python-GUI库对比"><a href="#Python-GUI库对比" class="headerlink" title="Python GUI库对比"></a>Python GUI库对比</h1><table>
+        <h1 id="Python-GUI库对比"><a href="#Python-GUI库对比" class="headerlink" title="Python GUI库对比"></a>Python GUI库对比</h1><p>&emsp;&emsp;由于最近需要做一些简单的工具来完成一些重复性的劳动，在核心功能已经用python实现的基础上，考虑加上GUI，以便可以发给其他人使用，因此，对Python常用的GUI加以调研，形成了下面的对比表。</p>
+<table>
 <thead>
 <tr>
 <th align="center">库名</th>
@@ -110,19 +111,19 @@
 <td align="center">tkinter</td>
 <td align="center">python自带</td>
 <td align="center">python是可以商用的开源协议，tcl/tk是BSD协议</td>
-<td align="center">支持大部分桌面平台</td>
+<td align="center">大部分桌面平台</td>
 </tr>
 <tr>
 <td align="center">PyQt5</td>
 <td align="center">pip安装</td>
-<td align="center">GPL，基于PyQt5开发的程序需要开源</td>
+<td align="center">GPL，基于PyQt5开发的程序需要开源；也可以使用商业协议</td>
 <td align="center">基本上所有的平台</td>
 </tr>
 <tr>
 <td align="center">wxPython</td>
 <td align="center">pip安装</td>
 <td align="center">LGPL，只是使用库的话，是不需要开源的</td>
-<td align="center">基本上所有的PC平台</td>
+<td align="center">基本上所有的桌面平台</td>
 </tr>
 <tr>
 <td align="center">Dabo</td>
@@ -140,13 +141,13 @@
 <td align="center">kivy</td>
 <td align="center">pip安装</td>
 <td align="center">MIT协议和LGPL协议</td>
-<td align="center">跨平台，支持所有的桌面系统和移动平台系统和树莓派</td>
+<td align="center">跨平台，支持所有的桌面系统、移动平台系统和树莓派</td>
 </tr>
 <tr>
 <td align="center">libavg</td>
 <td align="center">下载安装包安装，底层是C++实现，python只是作为他的胶水语言</td>
 <td align="center">LGPL2.1</td>
-<td align="center">支持大部分桌面平台</td>
+<td align="center">大部分桌面平台</td>
 </tr>
 <tr>
 <td align="center">Pyforms</td>
@@ -158,20 +159,21 @@
 <td align="center">PyGObject</td>
 <td align="center">单独下载，还有很多依赖要安装</td>
 <td align="center">LGPL2.1</td>
-<td align="center">支持桌面平台</td>
+<td align="center">桌面平台</td>
 </tr>
 <tr>
 <td align="center">PySide</td>
 <td align="center">pip安装，需要自己安装qt和其他依赖</td>
 <td align="center">LGPLv3和GPLv2和商业协议</td>
-<td align="center">支持桌面平台</td>
+<td align="center">桌面平台</td>
 </tr>
 </tbody></table>
+<p>&emsp;&emsp;从上面的对比表可以看出，目前可以考虑使用的GUI库有三个，tkinter、PyQt5和wxPython，准备分别用这三个库写一个简单的demo来仔细对比下，之后再选择一个比较顺手的来用。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/09/13/python-gui/" data-id="ckf13ck0x000aqwppdwpphf9q" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/09/13/python-gui/" data-id="ckf17alh50009ysppe9gmbmm3" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
