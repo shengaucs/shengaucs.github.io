@@ -5,16 +5,20 @@
   
 
   
-  <title>胜仔漫谈</title>
+  <title>Redis-Protocol-Specification | 胜仔漫谈</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="温故与知新">
-<meta property="og:type" content="website">
-<meta property="og:title" content="胜仔漫谈">
-<meta property="og:url" content="http://yoursite.com/index.html">
+  <meta name="description" content="redis协议说明原文在这里https:&#x2F;&#x2F;redis.io&#x2F;topics&#x2F;protocol &amp;emsp;&amp;emsp;Redis客户端使用RESP(REdis Serialization Protocol, redis序列化协议)与Redis服务端通信。虽然RESP是为Redis设计的，但是其也可以用于其他客户端-服务端软件项目。 &amp;emsp;&amp;emsp;RESP是下面几个特性之间的折中：  易于">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis-Protocol-Specification">
+<meta property="og:url" content="http://yoursite.com/2020/11/08/redis-protocol-specification/index.html">
 <meta property="og:site_name" content="胜仔漫谈">
-<meta property="og:description" content="温故与知新">
+<meta property="og:description" content="redis协议说明原文在这里https:&#x2F;&#x2F;redis.io&#x2F;topics&#x2F;protocol &amp;emsp;&amp;emsp;Redis客户端使用RESP(REdis Serialization Protocol, redis序列化协议)与Redis服务端通信。虽然RESP是为Redis设计的，但是其也可以用于其他客户端-服务端软件项目。 &amp;emsp;&amp;emsp;RESP是下面几个特性之间的折中：  易于">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-11-08T04:53:02.000Z">
+<meta property="article:modified_time" content="2020-11-09T16:41:49.272Z">
 <meta property="article:author" content="jiasheng yu">
+<meta property="article:tag" content="redis">
+<meta property="article:tag" content="translation">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternate" href="/atom.xml" title="胜仔漫谈" type="application/atom+xml">
@@ -68,9 +72,7 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-    <article id="post-redis-protocol-specification" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-redis-protocol-specification" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2020/11/08/redis-protocol-specification/" class="article-date">
   <time datetime="2020-11-08T04:53:02.000Z" itemprop="datePublished">2020-11-08</time>
@@ -83,8 +85,8 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/11/08/redis-protocol-specification/">Redis-Protocol-Specification</a>
+    <h1 class="article-title" itemprop="name">
+      Redis-Protocol-Specification
     </h1>
   
 
@@ -227,495 +229,19 @@
     </footer>
   </div>
   
-</article>
-
-
+    
+<nav id="article-nav">
   
-    <article id="post-python-gui" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/09/13/python-gui/" class="article-date">
-  <time datetime="2020-09-13T08:55:06.000Z" itemprop="datePublished">2020-09-13</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/python/">python</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/09/13/python-gui/">Python-Gui</a>
-    </h1>
+    <a href="/2020/09/13/python-gui/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Python-Gui</div>
+    </a>
   
+</nav>
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="Python-GUI库对比"><a href="#Python-GUI库对比" class="headerlink" title="Python GUI库对比"></a>Python GUI库对比</h1><p>&emsp;&emsp;由于最近需要做一些简单的工具来完成一些重复性的劳动，在核心功能已经用python实现的基础上，考虑加上GUI，以便可以发给其他人使用，因此，对Python常用的GUI加以调研，形成了下面的对比表。</p>
-<table>
-<thead>
-<tr>
-<th align="center">库名</th>
-<th align="center">安装方式</th>
-<th align="center">许可证</th>
-<th align="center">支持的平台</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">tkinter</td>
-<td align="center">python自带</td>
-<td align="center">python是可以商用的开源协议，tcl/tk是BSD协议</td>
-<td align="center">大部分桌面平台</td>
-</tr>
-<tr>
-<td align="center">PyQt5</td>
-<td align="center">pip安装</td>
-<td align="center">GPL，基于PyQt5开发的程序需要开源；也可以使用商业协议</td>
-<td align="center">基本上所有的平台</td>
-</tr>
-<tr>
-<td align="center">wxPython</td>
-<td align="center">pip安装</td>
-<td align="center">LGPL，只是使用库的话，是不需要开源的</td>
-<td align="center">基本上所有的桌面平台</td>
-</tr>
-<tr>
-<td align="center">Dabo</td>
-<td align="center">多年不更新了</td>
-<td align="center"></td>
-<td align="center"></td>
-</tr>
-<tr>
-<td align="center">Flexx</td>
-<td align="center">pip安装</td>
-<td align="center">BSD-2</td>
-<td align="center">跨平台，但是对于桌面应用，需要系统已经有FireFox或Nw.js</td>
-</tr>
-<tr>
-<td align="center">kivy</td>
-<td align="center">pip安装</td>
-<td align="center">MIT协议和LGPL协议</td>
-<td align="center">跨平台，支持所有的桌面系统、移动平台系统和树莓派</td>
-</tr>
-<tr>
-<td align="center">libavg</td>
-<td align="center">下载安装包安装，底层是C++实现，python只是作为他的胶水语言</td>
-<td align="center">LGPL2.1</td>
-<td align="center">大部分桌面平台</td>
-</tr>
-<tr>
-<td align="center">Pyforms</td>
-<td align="center">pip安装，18年最后一次更新</td>
-<td align="center">MIT协议</td>
-<td align="center">跨平台</td>
-</tr>
-<tr>
-<td align="center">PyGObject</td>
-<td align="center">单独下载，还有很多依赖要安装</td>
-<td align="center">LGPL2.1</td>
-<td align="center">桌面平台</td>
-</tr>
-<tr>
-<td align="center">PySide</td>
-<td align="center">pip安装，需要自己安装qt和其他依赖</td>
-<td align="center">LGPLv3和GPLv2和商业协议</td>
-<td align="center">桌面平台</td>
-</tr>
-</tbody></table>
-<p>&emsp;&emsp;从上面的对比表可以看出，目前可以考虑使用的GUI库有三个，tkinter、PyQt5和wxPython，准备分别用这三个库写一个简单的demo来仔细对比下，之后再选择一个比较顺手的来用。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/09/13/python-gui/" data-id="ckharzrn9000fb4pp8brd3anu" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
-
-    </footer>
-  </div>
   
 </article>
-
-
-  
-    <article id="post-base64" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/11/24/base64/" class="article-date">
-  <time datetime="2018-11-24T13:55:20.000Z" itemprop="datePublished">2018-11-24</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/HTTP/">HTTP</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/11/24/base64/">Base64编码介绍</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>base64编码介绍</p>
-        
-          <p class="article-more-link">
-            <a href="/2018/11/24/base64/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/11/24/base64/" data-id="ckharzrmp0000b4ppf0m4h7wu" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HTTP/" rel="tag">HTTP</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-linux-crontab" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/11/04/linux-crontab/" class="article-date">
-  <time datetime="2018-11-04T05:23:23.000Z" itemprop="datePublished">2018-11-04</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/linux/">linux</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/11/04/linux-crontab/">Linux_crontab</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Linux中crontab学习</p>
-        
-          <p class="article-more-link">
-            <a href="/2018/11/04/linux-crontab/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/11/04/linux-crontab/" data-id="ckharzrn40006b4ppa28whgem" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/" rel="tag">linux</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-virtualbox-ubuntu-server-intranet" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/09/17/virtualbox-ubuntu-server-intranet/" class="article-date">
-  <time datetime="2018-09-17T15:25:49.000Z" itemprop="datePublished">2018-09-17</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/network/">network</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/09/17/virtualbox-ubuntu-server-intranet/">Virtualbox中ubuntu Server组成局域网</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>由于要在虚拟机中进行web开发，为了能够使用host能够访问到虚拟机中的网址，因此，需要将虚拟机和主机组成一个局域网。本文主要介绍实现上述目的方法。</p>
-        
-          <p class="article-more-link">
-            <a href="/2018/09/17/virtualbox-ubuntu-server-intranet/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/09/17/virtualbox-ubuntu-server-intranet/" data-id="ckharzrnb000hb4pp2unrfxo5" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/server/" rel="tag">server</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ubuntu/" rel="tag">ubuntu</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-effective-python-learning" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/07/15/effective-python-learning/" class="article-date">
-  <time datetime="2018-07-15T14:02:28.000Z" itemprop="datePublished">2018-07-15</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/python/">python</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/07/15/effective-python-learning/">《Effective Python》学习总结</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>这篇文章主要记录下对于《Effective Python》的学习总结</p>
-        
-          <p class="article-more-link">
-            <a href="/2018/07/15/effective-python-learning/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/15/effective-python-learning/" data-id="ckharzrn30005b4ppeon55mzb" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/learning/" rel="tag">learning</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-install-django" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/07/22/install-django/" class="article-date">
-  <time datetime="2017-07-22T13:22:28.000Z" itemprop="datePublished">2017-07-22</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/DJango/">DJango</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/07/22/install-django/">Django安装</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>一直想学习下web后端开发，刚好最近想把买了几个月的树莓派用起来，干脆就做一个小的视频网站吧。由于对于Python比较有好感，因此决定选择Python作为后端开发语言。为了能够快速地搞出一个能跑的版本，决定采用Django框架。</p>
-        
-          <p class="article-more-link">
-            <a href="/2017/07/22/install-django/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/07/22/install-django/" data-id="ckharzrnd000lb4pph0abe1wn" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Django/" rel="tag">Django</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-libevent-learning-about-and-intro" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/05/06/libevent-learning-about-and-intro/" class="article-date">
-  <time datetime="2017-05-05T18:57:56.000Z" itemprop="datePublished">2017-05-06</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/libevent/">libevent</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/05/06/libevent-learning-about-and-intro/">Libevent文档翻译之-前言</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>libevent作为一个高效的网络库，可以集成一下作为网络服务器的底层，因此，有必要学习下libevent的使用。</p>
-        
-          <p class="article-more-link">
-            <a href="/2017/05/06/libevent-learning-about-and-intro/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/05/06/libevent-learning-about-and-intro/" data-id="ckharzrn20004b4pp542j8vjs" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/libevent/" rel="tag">libevent</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-python-note-0" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/01/23/python-note-0/" class="article-date">
-  <time datetime="2017-01-22T17:38:26.000Z" itemprop="datePublished">2017-01-23</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/01/23/python-note-0/">Python小札记(1)-对象的默认布尔值</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>本文主要记录在python中，不同对象在进行布尔检测时的默认值</p>
-        
-          <p class="article-more-link">
-            <a href="/2017/01/23/python-note-0/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/01/23/python-note-0/" data-id="ckharzrn6000ab4ppbeue18do" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-hexo-install" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/10/02/hexo-install/" class="article-date">
-  <time datetime="2016-10-01T18:02:52.000Z" itemprop="datePublished">2016-10-02</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E6%8A%80%E5%B7%A7/">技巧</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/10/02/hexo-install/">Hexo安装</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>为了利用github提供的page功能来实现自己博客的目的，我选择使用hexo工具，本文将介绍hexo的安装。</p>
-        
-          <p class="article-more-link">
-            <a href="/2016/10/02/hexo-install/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/10/02/hexo-install/" data-id="ckharzrmy0001b4pp3lx88r0m" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%8A%80%E5%B7%A7/" rel="tag">技巧</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-
 
 </section>
         
